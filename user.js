@@ -20,6 +20,20 @@ if(localStorage.getItem("categories")==null){
 else {
   categories=JSON.parse(localStorage.getItem("categories"));
 }
+let payment =[];
+if(localStorage.getItem('payment')==null){
+  payment=[];
+}
+else{
+  payment=JSON.parse(localStorage.getItem("payment"));
+}
+let shipping=[];
+if(localStorage.getItem('shipping')==null){
+  shipping=[];
+}
+else{
+  shipping=JSON.parse(localStorage.getItem("shipping"));
+}
 let orders = [];
 var carObj;
 var cart=[];
@@ -361,6 +375,24 @@ class Admin extends User{
       }      
     }
   }
+  categoryProducts(categoryName){
+    let result = [];
+    for (let i = 0; i < products.length; i++) {
+      if( categoryName==products[i].productCategory){
+        result.push(products[i]);
+      }      
+    }
+    return result;
+  }
+  viewProduct(id){
+    let product;
+    for (let i = 0; i < products.length; i++) {
+      if(products[i].id==id);{
+        product=products[i];
+        return product;
+      }      
+    }
+  }
   addUser( name, username, email, password , type){
     let founded =0;
     for (let i = 0; i < users.length; i++) {
@@ -412,6 +444,39 @@ class Admin extends User{
       }      
     }
     console.log("invalid user id");
+  }
+  addPayment(paymentMethod){
+    let paymentObj=new Payment(paymentMethod);
+    payment.push(paymentObj);
+    localStorage.setItem("payment",JSON.stringify(payment));
+  }
+  deletePayment(paymentId){
+    for (let i = 0; i < payment.length; i++) {
+      if(payment[i].paymentId==paymentId){
+        payment.splice(i,1);
+        localStorage.setItem('payment',JSON.stringify(payment));
+        return;
+      }      
+    }
+    console.log("invalid ID");
+  }
+  viewPaymentMethods(){
+    return payment;
+  }
+  addShipping(type,cost){
+    let shippingObj = new Shipping(type,cost);
+    shipping.push(shippingObj);
+    localStorage.setItem("shipping",JSON.stringify(shipping));
+  }
+  deleteshipping(shippingId){
+    for (let i = 0; i < shipping.length; i++) {
+      if(shipping[i].shippingId==shippingId){
+        shipping.splice(i,1);
+        localStorage.setItem('shipping',JSON.stringify(shipping));
+        return;
+      }      
+    }
+    console.log("invalid ID");
   }
 }
 class Client extends User{
